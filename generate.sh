@@ -1,0 +1,2 @@
+cmake -DSTM32_CHIP=STM32F103C8 -DCMAKE_TOOLCHAIN_FILE=cmake/gcc_stm32.cmake -DCMAKE_BUILD_TYPE=Debug cmake-build-debug
+cmake -DSTM32_CHIP=STM32F103C8 -DCMAKE_TOOLCHAIN_FILE=cmake/gcc_stm32.cmake -DCMAKE_BUILD_TYPE=Release cmake-build-release
