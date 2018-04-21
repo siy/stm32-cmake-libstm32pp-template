@@ -2,8 +2,6 @@
 // Created by siy on 4/19/18.
 //
 
-#define STM32F1XX
-
 #include "clock.hpp"
 
 #include "interrupt.hpp"
@@ -14,35 +12,29 @@ typedef PA0 LED;
 
 #include "peripheral/tim.hpp"
 
-void initializeGpio()
-{
+void initializeGpio() {
     LED::enableClock();
 
 #ifdef STM32F1XX
-    LED::setMode(gpio::cr::GP_PUSH_PULL_2MHZ);
+    LED::setMode(gpio::cr::GP_PUSH_PULL_50MHZ);
 #else
     LED::setMode(gpio::moder::OUTPUT);
 #endif
 }
 
-void initializeTimer()
-{
+void initializeTimer() {
     TIM6::enableClock();
-    TIM6::configurePeriodicInterrupt<
-            4 /* Hz */
-    >();
+    TIM6::configurePeriodicInterrupt<4>(); /* 4 Hz */
 }
 
-void initializePeripherals()
-{
+void initializePeripherals() {
     initializeGpio();
     initializeTimer();
 
     TIM6::startCounter();
 }
 
-int main()
-{
+int main() {
     clk::initialize();
 
     initializePeripherals();
