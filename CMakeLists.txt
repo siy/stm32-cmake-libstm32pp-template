@@ -26,8 +26,10 @@ INCLUDE_DIRECTORIES(
 )
 
 SET(PROJECT_SOURCES
-    src/main.cpp
+    src/startup.cpp
+    src/system_call.cpp
     src/interrupt.cpp
+    src/main.cpp
 )
 
 SET(STM32_LINKER_SCRIPT ${CMSIS_LINKER_SCRIPT})

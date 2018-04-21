@@ -12,6 +12,13 @@ typedef PA0 LED;
 
 #include "peripheral/tim.hpp"
 
+/* Seems needed if using HSE clock */
+void clk::hseFailureHandler()
+{
+//  Do something if high speed clock fails
+}
+
+
 void initializeGpio() {
     LED::enableClock();
 
