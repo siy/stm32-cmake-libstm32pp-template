@@ -1,5 +1,6 @@
 #!/bin/bash
-MCU=STM32F303VC
+#MCU=STM32F303VC
+MCU=STM32F103C8
 mkdir cmake-build-debug
 cd cmake-build-debug
 cmake -DSTM32_CHIP=${MCU} -DCMAKE_TOOLCHAIN_FILE=cmake/gcc_stm32.cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" ..

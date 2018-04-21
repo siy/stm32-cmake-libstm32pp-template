@@ -8,13 +8,24 @@
 
 #include "peripheral/gpio.hpp"
 
-typedef PA0 LED;
+using LED = PC13;
+using LED_ALERT = PE9;
 
 #include "peripheral/tim.hpp"
+
+using CLOCK_TIMER = TIM2;
 
 /* Seems needed if using HSE clock */
 void clk::hseFailureHandler()
 {
+//    LED_ALERT::enableClock();
+//#ifdef STM32F1XX
+//    LED_ALERT::setMode(gpio::cr::GP_PUSH_PULL_50MHZ);
+//#else
+//    LED_ALERT::setMode(gpio::moder::OUTPUT);
+//#endif
+//    LED_ALERT::setHigh();
+//
 //  Do something if high speed clock fails
 }
 
@@ -27,18 +38,25 @@ void initializeGpio() {
 #else
     LED::setMode(gpio::moder::OUTPUT);
 #endif
+    //LED::setHigh();
+    LED::setLow();
 }
 
 void initializeTimer() {
-    TIM6::enableClock();
-    TIM6::configurePeriodicInterrupt<4>(); /* 4 Hz */
+    CLOCK_TIMER::enableClock();
+    CLOCK_TIMER::configurePeriodicInterrupt<4>(); /* 4 Hz */
 }
 
 void initializePeripherals() {
     initializeGpio();
     initializeTimer();
 
-    TIM6::startCounter();
+    CLOCK_TIMER::startCounter();
+}
+
+void loop() {
+    while (true) {
+    }
 }
 
 int main() {
@@ -46,21 +64,14 @@ int main() {
 
     initializePeripherals();
 
-    while (true) {
-    }
+    loop();
 }
 
-#if defined VALUE_LINE || \
-    defined STM32F2XX || \
-    defined STM32F4XX
-void interrupt::TIM6_DAC()
-#else
-void interrupt::TIM6()
-#endif
+void interrupt::TIM2()
 {
     static u8 counter = 0;
 
-    TIM6::clearUpdateFlag();
+    CLOCK_TIMER::clearUpdateFlag();
 
     if (counter++ % 2)
         LED::setHigh();
