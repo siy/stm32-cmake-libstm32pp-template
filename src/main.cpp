@@ -15,19 +15,19 @@ using LED_ALERT = PE9;
 
 using CLOCK_TIMER = TIM2;
 
-/* Seems needed if using HSE clock */
-void clk::hseFailureHandler()
-{
-//    LED_ALERT::enableClock();
-//#ifdef STM32F1XX
-//    LED_ALERT::setMode(gpio::cr::GP_PUSH_PULL_50MHZ);
-//#else
-//    LED_ALERT::setMode(gpio::moder::OUTPUT);
-//#endif
-//    LED_ALERT::setHigh();
-//
-//  Do something if high speed clock fails
-}
+///* Seems needed if using HSE clock */
+//void clk::hseFailureHandler()
+//{
+////    LED_ALERT::enableClock();
+////#ifdef STM32F1XX
+////    LED_ALERT::setMode(gpio::cr::GP_PUSH_PULL_50MHZ);
+////#else
+////    LED_ALERT::setMode(gpio::moder::OUTPUT);
+////#endif
+////    LED_ALERT::setHigh();
+////
+////  Do something if high speed clock fails
+//}
 
 
 void initializeGpio() {
@@ -49,13 +49,26 @@ void initializeTimer() {
 
 void initializePeripherals() {
     initializeGpio();
-    initializeTimer();
-
-    CLOCK_TIMER::startCounter();
+//    initializeTimer();
+//
+//    CLOCK_TIMER::startCounter();
 }
 
+volatile int tmp = 0;
+
 void loop() {
+    bool cnt = 0;
+
     while (true) {
+        cnt = !cnt;
+
+        (cnt) ? LED::setHigh() : LED::setLow();
+
+        tmp = 10000;
+
+        while(tmp > 0) {
+            tmp--;
+        }
     }
 }
 
