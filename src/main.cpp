@@ -9,26 +9,20 @@
 #include "peripheral/gpio.hpp"
 
 using LED = PC13;
-using LED_ALERT = PE9;
 
 #include "peripheral/tim.hpp"
 
-using CLOCK_TIMER = TIM2;
+using CLOCK_TIMER = TIM1;
 
-///* Seems needed if using HSE clock */
-//void clk::hseFailureHandler()
-//{
-////    LED_ALERT::enableClock();
-////#ifdef STM32F1XX
-////    LED_ALERT::setMode(gpio::cr::GP_PUSH_PULL_50MHZ);
-////#else
-////    LED_ALERT::setMode(gpio::moder::OUTPUT);
-////#endif
-////    LED_ALERT::setHigh();
-////
-////  Do something if high speed clock fails
-//}
-
+/* Seems needed if using HSE clock */
+namespace clk {
+    void hseFailureHandler()
+    {
+        while(true) {
+            //Intentionally left empty
+        }
+    }
+}
 
 void initializeGpio() {
     LED::enableClock();
@@ -38,7 +32,6 @@ void initializeGpio() {
 #else
     LED::setMode(gpio::moder::OUTPUT);
 #endif
-    //LED::setHigh();
     LED::setLow();
 }
 
@@ -64,7 +57,7 @@ void loop() {
 
         (cnt) ? LED::setHigh() : LED::setLow();
 
-        tmp = 10000;
+        tmp = 100000;
 
         while(tmp > 0) {
             tmp--;
@@ -80,7 +73,7 @@ int main() {
     loop();
 }
 
-void interrupt::TIM2()
+void interrupt::TIM1_UP()
 {
     static u8 counter = 0;
 
